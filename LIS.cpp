@@ -33,7 +33,7 @@ void solve(){
     }
     int ans = findlis(arr);
     
-    cout << ans << endl;
+    cout << "the longest Incresing subsequence is " <<ans << endl;
 }
 
 signed main(){
