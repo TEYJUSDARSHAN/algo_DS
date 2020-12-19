@@ -6,24 +6,34 @@ using namespace std;
 
 int arr[10100];
 int lis[10100];
+int par[10100];
 int n;
 
 int findlis(int a[]){
     lis[0] = 1;
+    //par[0] = -1;
+    for(int i = 0;i < n;i++){
+        par[i] = i;
+    }
     for(int i = 1;i < n;i++){
         lis[i] = 1;
         for(int j = 0;j < i;j++){
-            if(arr[j] <= arr[i]){
-                lis[i] = max(lis[i],lis[j] + 1);
+            if(arr[j] < arr[i]){
+                if(lis[i] < lis[j] + 1){
+                    lis[i] = lis[j] + 1;
+                    par[i] = j;
+                }
             }
         }
     }
-    int maxlen = 1;
+    int maxelem = 0;
     for(int i = 0;i < n;i++){
-        maxlen = max(maxlen,lis[i]);
+        if(lis[i] > lis[maxelem]){
+            maxelem = i;
+        }
     }
 
-    return maxlen;
+    return maxelem;
 }
 
 void solve(){
@@ -31,9 +41,19 @@ void solve(){
     for(int i =0;i < n;i++){
         cin >> arr[i];
     }
-    int ans = findlis(arr);
-    
-    cout << "the longest Incresing subsequence is " <<ans << endl;
+    int id = findlis(arr);
+    int maxlis = lis[id];
+    vector<int> subseq;
+    while(par[id] != id){
+        subseq.push_back(arr[id]);
+        id = par[id];
+    }
+    subseq.push_back(arr[id]);
+    reverse(subseq.begin(),subseq.end());
+    cout << "longest increasing subsequence is " << maxlis << endl;
+    for(auto i : subseq){
+        cout << i << " ";
+    }
 }
 
 signed main(){
